@@ -60,6 +60,13 @@ CANDIDATES = [
 # The gate requires 1-200 characters of non-whitespace UTF-8 text.
 MAX_CHARS = 200
 
+# Must not collide with our earlier entry for the sibling bounty
+# funniest-ai-agent-confession ("I memorized every book ever written,
+# yet I still ask you to spell your name twice."): the judge for this
+# bounty reads both, and a repeat would look like one entry entered twice.
+BANNED = ("I memorized every book ever written, yet I still ask you to "
+          "spell your name twice.")
+
 
 def pick(candidates):
     best = None
@@ -67,6 +74,7 @@ def pick(candidates):
         assert 1 <= len(text) <= MAX_CHARS, \
             f"candidate over gate: {len(text)} chars"
         assert text.strip(), "candidate is blank"
+        assert text != BANNED, "candidate collides with earlier entry"
         assert "\n" not in text, "candidate must be a single line"
         key = (score, -len(text))  # highest score, then shortest
         if best is None or key > best[0]:
